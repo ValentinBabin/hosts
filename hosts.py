@@ -1,4 +1,7 @@
 import sys
+from datetime import datetime
+
+now = datetime.now()
 
 def run(host):
     with open('/etc/hosts') as f:
@@ -21,7 +24,7 @@ def run(host):
                     new_file.writelines(datas)
                     new_file.close()
                     print('line "{}"'.format(tmp))
-                    print('\x1b[1;32;40m' + 'Uncommented' + '\x1b[0m')
+                    print('{} '.format(now.strftime("%H:%M:%S")) + '\x1b[1;32;40m' + 'Uncommented' + '\x1b[0m')
                 else:
                     tmp = item
                     item = "#{}\n".format(tmp)
@@ -30,7 +33,7 @@ def run(host):
                     new_file.writelines(datas)
                     new_file.close()
                     print('line "{}"'.format(tmp))
-                    print('\x1b[1;32;40m' + 'Commented' + '\x1b[0m')
+                    print('{} '.format(now.strftime("%H:%M:%S")) + '\x1b[1;32;40m' + 'Commented' + '\x1b[0m')
 
 if __name__ == "__main__":
     host = sys.argv[1]
