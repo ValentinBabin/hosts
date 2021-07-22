@@ -1,7 +1,14 @@
 import sys
+import os
 from datetime import datetime
 
 now = datetime.now()
+
+def print_result(state, line):
+    print('line "{}"'.format(line))
+    print('[{}] '.format(now.strftime("%H:%M:%S")) + '\x1b[1;32;40m' + state + '\x1b[0m')
+    print('Modified file: ' + '\x1b[1;34;40m' + '/etc/hosts' + '\x1b[0m')
+    os.system('tail /etc/hosts')
 
 def run(host):
     with open('/etc/hosts') as f:
@@ -23,8 +30,7 @@ def run(host):
                     new_file = open('/etc/hosts', 'w')
                     new_file.writelines(datas)
                     new_file.close()
-                    print('line "{}"'.format(tmp))
-                    print('{} '.format(now.strftime("%H:%M:%S")) + '\x1b[1;32;40m' + 'Uncommented' + '\x1b[0m')
+                    print_result("Uncommented", tmp)
                 else:
                     tmp = item
                     item = "#{}\n".format(tmp)
@@ -32,8 +38,7 @@ def run(host):
                     new_file = open('/etc/hosts', 'w')
                     new_file.writelines(datas)
                     new_file.close()
-                    print('line "{}"'.format(tmp))
-                    print('{} '.format(now.strftime("%H:%M:%S")) + '\x1b[1;32;40m' + 'Commented' + '\x1b[0m')
+                    print_result("Commented", tmp)
 
 if __name__ == "__main__":
     host = sys.argv[1]
