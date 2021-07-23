@@ -4,13 +4,14 @@ from datetime import datetime
 
 now = datetime.now()
 
-def print_result(state, line):
+def print_result(state, line, printResultFile):
     print('line "{}"'.format(line))
     print('[{}] '.format(now.strftime("%H:%M:%S")) + '\x1b[1;32;40m' + state + '\x1b[0m')
-    print('Modified file: ' + '\x1b[1;34;40m' + '/etc/hosts' + '\x1b[0m')
-    os.system('tail /etc/hosts')
+    if(printResultFile == True):
+        print('Modified file: ' + '\x1b[1;34;40m' + '/etc/hosts' + '\x1b[0m')
+        os.system('tail /etc/hosts')
 
-def run(host):
+def run(host, printResultFile):
     with open('/etc/hosts') as f:
         datas = f.readlines()
         count = -1
@@ -30,7 +31,7 @@ def run(host):
                     new_file = open('/etc/hosts', 'w')
                     new_file.writelines(datas)
                     new_file.close()
-                    print_result("Uncommented", tmp)
+                    print_result("Uncommented", tmp, printResultFile)
                 else:
                     tmp = item
                     item = "#{}\n".format(tmp)
@@ -38,8 +39,17 @@ def run(host):
                     new_file = open('/etc/hosts', 'w')
                     new_file.writelines(datas)
                     new_file.close()
-                    print_result("Commented", tmp)
+                    print_result("Commented", tmp, printResultFile)
 
 if __name__ == "__main__":
     host = sys.argv[1]
-    run(host)
+    printRes = False
+    if( len(sys.argv) > 2 ):
+        if(sys.argv[2] == "--print"):
+            printRes = True
+        else:
+            printRes = False
+    else:
+        printRes = False
+
+    run(host, printRes)
